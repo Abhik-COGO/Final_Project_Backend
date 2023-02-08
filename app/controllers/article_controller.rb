@@ -34,7 +34,7 @@ class ArticleController < ApplicationController
     end
 
     def findByAuthor
-        @article = Article.find_by(username: params[:author])
+        @article = Article.find(params[:id])
         render json: @article
     end
 
