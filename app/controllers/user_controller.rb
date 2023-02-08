@@ -3,7 +3,7 @@ class UserController < ApplicationController
     # skip_before_action :verify_authenticity_token
 
     before_action :authorize_request, except: :create
-    before_action :find_user, except: %i[create index]
+    before_action :find_user, except: %i[create allUser]
 
     def create
         @user = User.new(user_params);
