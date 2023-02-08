@@ -25,14 +25,11 @@ Rails.application.routes.draw do
   #delete article
   delete 'article/delete' => 'article#delete';
 
-  #read title
-  get 'article/like' => 'article#readByTitle'
-
   #Show limited content on page
   get 'article/pagination' => 'article#pagination'
 
   #search by partial title
-  post 'article/search' => 'article#readByTitle'
+  get 'article/search' => 'article#readByTitle'
 
   # -------------------------------------------------------------------------------
   
@@ -46,10 +43,10 @@ Rails.application.routes.draw do
   post 'categories/delete' => 'category#delete'
 
   #search Articles by category 
-  post 'categories/searchBy' => 'category#findByCat';
+  get 'categories/searchBy' => 'category#findByCat';
 
   #search categories by ID
-  get 'categories/search' => 'categories#findById';
+  get 'categories/search' => 'category#findById';
 
   # ----------------------------------------------------------------------------
  

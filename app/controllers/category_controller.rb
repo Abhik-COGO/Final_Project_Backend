@@ -1,7 +1,7 @@
 class CategoryController < ApplicationController
 
     # skip_before_action :verify_authenticity_token
-    
+
     before_action :authorize_request
     before_action :authenticate
 
@@ -22,12 +22,12 @@ class CategoryController < ApplicationController
     end
 
     def findByCat
-        @article = []
+        article = []
         ArticleCategory.where(category_id: params[:category_id]).each {
-            |a|
-            @article.push(Article.where(id: a.article_id))
+            |articles|
+            article.push(Article.where(id: articles.article_id))
         }
-        render json: @article
+        render json: article
     end
 
     def findById

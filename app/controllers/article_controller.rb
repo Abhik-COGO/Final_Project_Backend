@@ -3,7 +3,7 @@ class ArticleController < ApplicationController
     # skip_before_action :verify_authenticity_token
     
     before_action :authorize_request
-    before_action :find_article, except: %i[create allArticle] # adding multiple methods in except
+    before_action :find_article, except: %i[create allArticle readByTitle, pagination] # adding multiple methods in except
     before_action :authenticate, except: %i[create allArticle]
 
     def allArticle
@@ -25,11 +25,10 @@ class ArticleController < ApplicationController
 
 
     def update
-        @article = Article.find(params[:article_id])
         @article.title = params[:title] || @article.title
         @article.content = params[:content] || @article.content
-        @article.created = parmas[:created] || @article.created
-        @article.article_url = parmas[:article_url] || @article.article_url
+        @article.created = params[:created] || @article.created
+        @article.article_url = params[:article_url] || @article.article_url
         @article.save
         render json: @article
     end
@@ -43,12 +42,12 @@ class ArticleController < ApplicationController
         @article = Article.find(params[:id])
         render json: @article
         # for deletion of article and categories relation from join table
-        ArticleCategory.where(article_id: article.id).each{
+        ArticleCategory.where(article_id: @article.id).each{
             |a|
-            a.delete
+            a.destroy
         }
 
-        @article.delete
+        @article.destroy
     end
 
     def pagination
@@ -71,11 +70,11 @@ class ArticleController < ApplicationController
     def find_article
         @article = Article.find(params[:id])
         rescue ActiveRecord::RecordNotFound
-            render json: { errors: 'User not found' }, status: :not_found
+            render json: { errors: 'Article not found' }, status: :not_found
     end
         
     def authenticate
-        if(@current_user.id != @article.user_id)
+        if(@article && @current_user.id != @article.user_id)
             raise "Not Authorized"
         end
     end
