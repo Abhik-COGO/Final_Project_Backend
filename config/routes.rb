@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -63,7 +63,7 @@ Rails.application.routes.draw do
   delete 'user/delete' => 'user#destroy';
 
   #update the user
-  put 'user/update' => 'user#update';
+  put 'user/update/' => 'user#update';
 
   # --------------------------------------------------------------------------
 

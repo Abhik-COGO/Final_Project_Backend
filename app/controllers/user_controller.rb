@@ -23,7 +23,8 @@ class UserController < ApplicationController
     end
 
     def update
-        if(@current_user.id == @user.id)
+        user = params[:user_id]
+        if(@current_user.id == user)
              @current_user.bio = params[:bio] || @current_user.bio
              @current_user.profile_url = params[:imageURl] || @current_user.profile_url
              @current_user.save
