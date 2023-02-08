@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -7,9 +8,10 @@ Rails.application.routes.draw do
   #Categories and article Relation
   get 'articleCategories/', to: "article_category#index";
 
+  #-----------------------------------------------------------------------
 
   #reterive all articles
-  get 'article/all' => 'article#allArticle';
+  get 'article/all', to: 'article#allArticle';
 
   #create article
   post 'article/create' => 'article#create';
@@ -17,8 +19,8 @@ Rails.application.routes.draw do
   #update article
   put 'article/update' => 'article#update';
 
-  #find article
-  get 'article/search' => 'article#findByID';
+  # find article by author name
+  get 'article/find' => 'article#findByAuthor';
 
   #delete article
   delete 'article/delete' => 'article#delete';
@@ -28,6 +30,9 @@ Rails.application.routes.draw do
 
   #Show limited content on page
   get 'article/pagination' => 'article#pagination'
+
+  #search by partial title
+  post 'article/search' => 'article#readByTitle'
 
   # -------------------------------------------------------------------------------
   
@@ -40,7 +45,7 @@ Rails.application.routes.draw do
   #delete categories
   post 'categories/delete' => 'category#delete'
 
-  #search by category ID
+  #search Articles by category 
   post 'categories/searchBy' => 'category#findByCat';
 
   #search categories by ID
@@ -55,28 +60,30 @@ Rails.application.routes.draw do
   get 'user/all' => 'user#allUser';
 
   #delete user
-  delete 'user/delete' => 'user#destroy'
+  delete 'user/delete' => 'user#destroy';
+
+  #update the user
+  put 'user/update' => 'user#update';
 
   # --------------------------------------------------------------------------
 
   # To check for login
   post '/auth/login', to: 'authentication#login'
 
-  #To get all the user data
-  get '/users', to: "users#index"
+  #----------------------------------------------------------------------------
 
-  #To Create new User
-  post '/users', to: 'users#create'
+  #total number of likes of that article
+  post 'like/total', to: 'like#like'
 
-  #To Show unique user
-  get '/users/:username', to: 'user#show'
+  #most liked post
+  get 'like/most', to: 'like#most_likes'
 
-  #To Update user
-  put '/users/:username', to: 'user#update'
+  #---------------------------------------------------------------------
 
-  #To delete user
-  delete '/users/:username', to: 'user#destroy'
+  # add comment to post
+  post 'comment', to: "comment#comment";
 
-
+  # most commented post
+  get 'comment/most', to: 'comment#most_comment'
 
 end

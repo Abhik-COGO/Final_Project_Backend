@@ -1,6 +1,9 @@
 class CategoryController < ApplicationController
 
-    skip_before_action :verify_authenticity_token
+    # skip_before_action :verify_authenticity_token
+    
+    before_action :authorize_request
+    before_action :authenticate
 
     def allCategories
         @categories = Category.all
@@ -13,7 +16,7 @@ class CategoryController < ApplicationController
     end
 
     def delete
-        @category = Category.find(params[:category_id])
+        @category = Category.find_by(id: params[:category_id])
         render json: @categories
         @category.destroy
     end
@@ -28,7 +31,15 @@ class CategoryController < ApplicationController
     end
 
     def findById
-        @name = Category.find(params[:category_id])
+        @name = Category.find_by(id: params[:category_id])
         render json: @name
     end
+
+    private
+    def authenticate
+        if (@current_user.id != 1)
+            raise "Not authorized"
+        end
+    end
+
 end

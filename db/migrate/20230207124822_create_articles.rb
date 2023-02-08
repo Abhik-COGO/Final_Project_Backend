@@ -1,7 +1,5 @@
 class CreateArticles < ActiveRecord::Migration[7.0]
 
-  before_action :authorize_request
-
   def change
     create_table :articles do |t|
       t.belongs_to :user, foregin_key: true

@@ -1,7 +1,10 @@
 class ArticleController < ApplicationController
 
     # skip_before_action :verify_authenticity_token
+    
     before_action :authorize_request
+    before_action :find_article, except: %i[create allArticle] # adding multiple methods in except
+    before_action :authenticate, except: %i[create allArticle]
 
     def allArticle
         @article = Article.all
@@ -31,8 +34,8 @@ class ArticleController < ApplicationController
         render json: @article
     end
 
-    def findById
-        @article = Article.find(params[:id])
+    def findByAuthor
+        @article = Article.find_by(username: params[:author])
         render json: @article
     end
 
@@ -62,6 +65,18 @@ class ArticleController < ApplicationController
 
     private
     def user_params
-        params.permit(:title, :subheading, :content, :created, :article_url)
+        params.permit(:title, :subheading, :content, :created, :article_url, :no_likes, :no_comments)
+    end
+
+    def find_article
+        @article = Article.find(params[:id])
+        rescue ActiveRecord::RecordNotFound
+            render json: { errors: 'User not found' }, status: :not_found
+    end
+        
+    def authenticate
+        if(@current_user.id != @article.user_id)
+            raise "Not Authorized"
+        end
     end
 end
